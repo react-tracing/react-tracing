@@ -66,6 +66,8 @@ const MyTracedComponent = () => (
   </Touchable>
 );
 
+
+
 // ADD YOUR OWN TRACING
 // ====================
 
@@ -136,4 +138,4 @@ This stack is stored in the global scope (it's a bit ugly, do you have a better 
 
 ### Working with multiple systems
 
-TBD
+Every time you send a fetch or xhr request we set the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context.
