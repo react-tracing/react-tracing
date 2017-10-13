@@ -17,17 +17,17 @@ const tracer = new Tracing({
 
 // You have two options here depending on your style of usage
 // a) You can either use it locally, enabling you to set a different service name per fetch 
-const defaultFetch = tracing.fetch();
-const tracingXhr = tracing.xhr(XMLHttpRequest); // last param optional, otherwise a global is taken
+const defaultFetch = tracer.fetch();
+const tracingXhr = tracer.xhr(XMLHttpRequest); // last param optional, otherwise a global is taken
 
 // b) You can choose to let us handle everything for you
 // This mutates the global fetch and XHR request
-tracing.initGlobalNetworkTracer();
+tracer.initGlobalNetworkTracer();
 
 // You can define a span that generates you the span names, this is the default one.
 // If you want to use the default and a third param pass anything that is not a function as the second parameter.
 const getSpanName = ({ url, method, data }) => `client send ${method} to ${url} with data ${JSON.stringify(data)}`;
-const tracingFetch = tracing.fetch(getSpanName, fetch); // last param optional, otherwise a global is taken
+const tracedFetch = tracer.fetch(getSpanName, fetch); // last param optional, otherwise a global is taken
 
 
 
