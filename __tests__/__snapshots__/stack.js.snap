@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stack should throw an error if is no element to peek on 1`] = `"No items in stack"`;
