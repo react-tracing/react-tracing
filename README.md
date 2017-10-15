@@ -1,4 +1,4 @@
-# 📈 React Tracing
+# 📈 React Tracing [![Build Status](https://travis-ci.org/react-tracing/react-tracing.svg?branch=master)](https://travis-ci.org/react-tracing/react-tracing) [![Coverage Status](https://coveralls.io/repos/github/react-tracing/react-tracing/badge.svg?branch=master)](https://coveralls.io/github/react-tracing/react-tracing?branch=master)
 A set of tools to add performance tracing to your React or React Native application.
 
 ## Usage

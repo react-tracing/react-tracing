@@ -1,0 +1,40 @@
+{
+  "name": "react-tracing",
+  "version": "0.0.0",
+  "description": "A set of tools to add performance tracing to your React or React Native application",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-tracing/react-tracing.git"
+  },
+  "keywords": [
+    "react",
+    "tracing",
+    "zipkin",
+    "performance"
+  ],
+  "author": "DanielMSchmidt <danielmschmidt92@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/react-tracing/react-tracing/issues"
+  },
+  "homepage": "https://github.com/react-tracing/react-tracing#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "jest": "^21.2.1"
+  }
+}
