@@ -20,8 +20,7 @@ describe("stack", () => {
     s.push(2);
     s.push(3);
 
-    s.pop();
-
+    expect(s.pop()).toBe(3);
     expect(s.peek()).toBe(2);
   });
 });
