@@ -1,10 +1,13 @@
 {
   "name": "react-tracing",
   "version": "0.0.0",
-  "description": "A set of tools to add performance tracing to your React or React Native application",
+  "description":
+    "A set of tools to add performance tracing to your React or React Native application",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "precommit": "lint-staged",
+    "test": "jest",
+    "fmt": "prettier --write **/*.{js,json,css}"
   },
   "jest": {
     "collectCoverage": true,
@@ -17,16 +20,14 @@
       }
     }
   },
+  "lint-staged": {
+    "*.{js,json,css}": ["prettier --write", "git add"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/react-tracing/react-tracing.git"
   },
-  "keywords": [
-    "react",
-    "tracing",
-    "zipkin",
-    "performance"
-  ],
+  "keywords": ["react", "tracing", "zipkin", "performance"],
   "author": "DanielMSchmidt <danielmschmidt92@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -35,6 +36,9 @@
   "homepage": "https://github.com/react-tracing/react-tracing#readme",
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "jest": "^21.2.1"
+    "husky": "^0.14.3",
+    "jest": "^21.2.1",
+    "lint-staged": "^4.2.3",
+    "prettier": "^1.7.4"
   }
 }
