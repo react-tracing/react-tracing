@@ -1,6 +1,22 @@
 language: node_js
-node_js:
-  - '8'
-  - '6'
-after_script:
-  - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'
+node_js: 8
+env: 
+  - $NODE_VERSION="8.7"
+matrix:
+  include:
+    # Unit Tests
+    - install:
+      - yarn install
+      script:
+      - yarn test
+      after_script:
+      - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'
+
+    # E2E Web
+    - install:
+      - cd example/react-example
+      - yarn install
+      before_script:
+      - yarn run build
+      script:
+      - yarn test
