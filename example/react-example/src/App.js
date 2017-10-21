@@ -1,20 +1,34 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { Basic } from "./screens";
 
 class App extends Component {
-  render() {
+  state = {
+    screen: false
+  };
+
+  renderScreenButton(title, component) {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <a
+        id={title}
+        onClick={() => {
+          this.setState({ screen: component });
+        }}
+      >
+        <span style={{ color: "blue", marginBottom: 20 }}>{title}</span>
+      </a>
     );
+  }
+
+  render() {
+    if (!this.state.screen) {
+      return (
+        <div className="App">{this.renderScreenButton("Basic", Basic)}</div>
+      );
+    }
+
+    const Screen = this.state.screen;
+    return <Screen />;
   }
 }
 
