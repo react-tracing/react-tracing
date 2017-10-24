@@ -117,6 +117,16 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+
+    signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            storePassword "react-tracing"
+            keyAlias "react-tracing"
+            keyPassword "react-tracing"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
