@@ -42,8 +42,8 @@ matrix:
 
     # E2E Tests android
   - language: android
-    sudo: required
-    jdk: oraclejdk8
+  sudo: required
+  jdk: oraclejdk8
 
   before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
