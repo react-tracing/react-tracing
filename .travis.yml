@@ -62,7 +62,6 @@ matrix:
       - nvm use --delete-prefix $NODE_VERSION;
       - curl -o- -L https://yarnpkg.com/install.sh | bash -s
       - export PATH="$HOME/.yarn/bin:$PATH"
-      - yarn global add react-native-cli detox-cli >/dev/null 2>&1
       - android list targets
       - echo no | android create avd --force -n test -t android-25 --abi x86
       - emulator -avd test -no-skin -no-audio -no-window &
