@@ -57,6 +57,7 @@ matrix:
           - extra-android-m2repository
           - extra-google-m2repository
           - sys-img-x86-android-25
+          - sys-img-armeabi-v7a-android-25
       before_install:
       - nvm install $NODE_VERSION;
       - nvm use --delete-prefix $NODE_VERSION;
