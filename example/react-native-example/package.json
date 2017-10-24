@@ -45,14 +45,14 @@
         "build":
           "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
         "type": "android.emulator",
-        "name": "Nexus_5X_API_25"
+        "name": "Nexus_5X_API_26"
       },
       "android.emu.release": {
         "binaryPath": "android/app/build/outputs/apk/app-release.apk",
         "build":
           "cd android && export RCT_NO_LAUNCH_PACKAGER=true && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
         "type": "android.emulator",
-        "name": "Nexus_5X_API_25"
+        "name": "Nexus_5X_API_26"
       }
     }
   }

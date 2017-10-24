@@ -50,14 +50,12 @@ matrix:
         - NODE_VERSION="8.7"
       android:
         components:
-          - tools
-          - platform-tools
-          - build-tools-25.0.1
+          - build-tools-25.0.3
           - android-25
           - extra-android-m2repository
+          - extra-google-google_play_services
           - extra-google-m2repository
-          - sys-img-x86-android-25
-          - sys-img-armeabi-v7a-android-25
+          - sys-img-armeabi-v7a-android-26
       before_install:
       - nvm install $NODE_VERSION;
       - nvm use --delete-prefix $NODE_VERSION;
