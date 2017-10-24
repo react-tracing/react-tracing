@@ -63,7 +63,7 @@ matrix:
       - curl -o- -L https://yarnpkg.com/install.sh | bash -s
       - export PATH="$HOME/.yarn/bin:$PATH"
       - android list targets
-      - echo no | android create avd --force -n Nexus_5X_API_25 -k "system-images;android-25;google_apis;x86"
+      - echo no | android create avd --force -n Nexus_5X_API_25 -t android-25
       - emulator -avd Nexus_5X_API_25 -no-skin -no-audio -no-window &
       install:
       - cd example/react-native-example
