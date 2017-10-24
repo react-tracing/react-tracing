@@ -1,16 +1,16 @@
-language: node_js
-node_js: 8
 env: 
-  - $NODE_VERSION="8.7"
+  - NODE_VERSION="8.7"
 matrix:
   include:
     # Unit Tests
-    # - install:
-    #   - yarn install
-    #   script:
-    #   - yarn test
-    #   after_script:
-    #   - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'
+    - language: node_js
+      node_js: 8
+      install:
+      - yarn install
+      script:
+      - yarn test
+      after_script:
+      - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'
 
     # E2E Web
     # - install:
@@ -21,7 +21,7 @@ matrix:
     #   script:
     #   - yarn test
 
-    # # E2E XCode 9
+    # E2E XCode 9
     # - language: objective-c
     #   os: osx
     #   osx_image: xcode9
@@ -41,72 +41,72 @@ matrix:
     #   - yarn run test:ios
 
     # E2E Tests android
-  - language: android
-  sudo: required
-  jdk: oraclejdk8
+    - language: android
+      sudo: required
+      jdk: oraclejdk8
 
-  before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      before_cache:
+      - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+      - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
-  cache:
-    directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+      cache:
+        directories:
+        - $HOME/.gradle/caches/
+        - $HOME/.gradle/wrapper/
 
-  env:
-  - NODE_VERSION=8.7
-  - ANDROID_API=25
-  - EMULATOR_API=24
-  - ANDROID_BUILD_TOOLS=25.0.2
-  - ADB_INSTALL_TIMEOUT=5 # minutes
+      env:
+      - NODE_VERSION=8.7
+      - ANDROID_API=25
+      - EMULATOR_API=24
+      - ANDROID_BUILD_TOOLS=25.0.2
+      - ADB_INSTALL_TIMEOUT=5 # minutes
 
-  android:
-    components:
-    - tools
-    - platform-tools
-    - build-tools-$ANDROID_BUILD_TOOLS
-    - android-$ANDROID_API
-    - android-$EMULATOR_API_LEVEL
-    - extra-google-m2repository
-    - extra-android-m2repository # for design library
-    - addon-google_apis-google-25 # google play services
-    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL # the fix!
+      android:
+        components:
+        - tools
+        - platform-tools
+        - build-tools-$ANDROID_BUILD_TOOLS
+        - android-$ANDROID_API
+        - android-$EMULATOR_API_LEVEL
+        - extra-google-m2repository
+        - extra-android-m2repository # for design library
+        - addon-google_apis-google-25 # google play services
+        - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
+        - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL # the fix!
 
-  licenses:
-  - android-sdk-preview-license-.+
-  - android-sdk-license-.+
-  - google-gdk-license-.+
+      licenses:
+      - android-sdk-preview-license-.+
+      - android-sdk-license-.+
+      - google-gdk-license-.+
 
-  before_install:
-  - nvm install $NODE_VERSION;
-  - nvm use --delete-prefix $NODE_VERSION;
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s
-  - export PATH="$HOME/.yarn/bin:$PATH"
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-  - cd example/react-native-example/android
-  - chmod +x gradlew
-  - echo y | android update sdk --no-ui --all --filter "tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  # - ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
-  - cd ../../..
-  
-  install: 
-  - cd example/react-native-example
-  - yarn
-  
+      before_install:
+      - nvm install $NODE_VERSION;
+      - nvm use --delete-prefix $NODE_VERSION;
+      - curl -o- -L https://yarnpkg.com/install.sh | bash -s
+      - export PATH="$HOME/.yarn/bin:$PATH"
+      - mkdir "$ANDROID_HOME/licenses" || true
+      - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+      - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+      - cd example/react-native-example/android
+      - chmod +x gradlew
+      - echo y | android update sdk --no-ui --all --filter "tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository"
+      - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
+      # - ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
+      - cd ../../..
+      
+      install: 
+      - cd example/react-native-example
+      - yarn
+      
 
-  before_script:
-  - echo "y" | android update sdk -a --no-ui --filter android-24
-  - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
-  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
-  - echo no | android create avd --force -n ANDROID_API_24 -t android-24 --abi armeabi-v7a
-  - emulator -avd ANDROID_API_24 -no-skin -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+      before_script:
+      - echo "y" | android update sdk -a --no-ui --filter android-24
+      - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
+      - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
+      - echo no | android create avd --force -n ANDROID_API_24 -t android-24 --abi armeabi-v7a
+      - emulator -avd ANDROID_API_24 -no-skin -no-window &
+      - android-wait-for-emulator
+      - adb shell input keyevent 82 &
 
-  script:
-  - yarn run test:android
+      script:
+      - yarn run test:android
