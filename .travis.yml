@@ -47,6 +47,7 @@ matrix:
       env:
         - ANDROID_TARGET=android-25
         - ANDROID_ABI=x86
+        - NODE_VERSION="8.7"
       android:
         components:
           - tools
