@@ -64,7 +64,7 @@ matrix:
       - export PATH="$HOME/.yarn/bin:$PATH"
       - yarn global add react-native-cli detox-cli >/dev/null 2>&1
       - android list targets
-      - echo no | android create avd --force -n test -t android-25 --abi x86 -no-accel
+      - echo no | android create avd --force -n test -t android-25 --abi x86
       - emulator -avd test -no-skin -no-audio -no-window &
       install:
       - cd example/react-native-example
