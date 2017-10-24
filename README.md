@@ -1,4 +1,6 @@
 # 📈 React Tracing [![Build Status](https://travis-ci.org/react-tracing/react-tracing.svg?branch=master)](https://travis-ci.org/react-tracing/react-tracing) [![Coverage Status](https://coveralls.io/repos/github/react-tracing/react-tracing/badge.svg?branch=master)](https://coveralls.io/github/react-tracing/react-tracing?branch=master) [![Cypress](img.shields.io/badge/cypress-dashboard-brightgreen.svg)](https://dashboard.cypress.io/#/projects/5gpnqw/runs)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/react-tracing/react-tracing.svg)](https://greenkeeper.io/)
 A set of tools to add performance tracing to your React or React Native application.
 
 ## Usage
