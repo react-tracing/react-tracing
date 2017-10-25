@@ -76,7 +76,14 @@ function myVeryLongFunction() {
   tracing.startSpan("Long Function");
   asyncFunction().then(() => {
      tracing.startSpan("Synchronous Bitcoin Mining");
-     mineBitcoinsAndDonateThem();
+     try {
+      mineBitcoinsAndDonateThem();
+     } catch(e) {
+       // Something went wrong, let's log the error
+       tracing.log({
+         miningError: e
+       });
+     }
      tracing.finishSpan(); 
   }).finally(() => {
     tracing.finishSpan();
