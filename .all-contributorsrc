@@ -17,7 +17,22 @@
         "doc",
         "ideas",
         "test",
-        "tool"
+        "tool",
+        "example",
+        "question",
+        "blog",
+        "bug",
+        "design",
+        "eventOrganizing",
+        "financial",
+        "fundingFinding",
+        "infra",
+        "plugin",
+        "review",
+        "talk",
+        "translation",
+        "tutorial",
+        "video"
       ]
     }
   ]
