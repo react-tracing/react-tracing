@@ -13,10 +13,16 @@ matrix:
       - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls'
 
     # E2E Web
-    - install:
+    - services:
+      - docker
+      install:
       - cd example/react-example
       - yarn install
       before_script:
       - yarn run build
+      - docker run -d -p 9411:9411 openzipkin/zipkin
+      - ./node_modules/.bin/serve -s build & SERVER_PID=$!
       script:
       - yarn test
+      after_script:
+      - kill -9 $SERVER_PID

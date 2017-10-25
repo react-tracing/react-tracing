@@ -11,11 +11,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test":
-      "serve -s build & echo $! > ./serve.pid && cypress run --record --key $CYPRESS_KEY ; kill -9 $(cat serve.pid) && rm serve.pid"
+    "test:build": "serve -s build",
+    "test": "cypress run --record --key $CYPRESS_KEY"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "cypress": "^1.0.2",
+    "node-fetch": "^1.7.3",
     "serve": "^6.3.1"
   }
 }
