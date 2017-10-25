@@ -1,0 +1,24 @@
+{
+  "projectName": "react-tracing",
+  "projectOwner": "react-tracing",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "DanielMSchmidt",
+      "name": "Daniel Schmidt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1337046?v=4",
+      "profile": "http://danielmschmidt.de/",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "test",
+        "tool"
+      ]
+    }
+  ]
+}

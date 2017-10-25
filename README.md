@@ -1,4 +1,5 @@
 # 📈 React Tracing [![Build Status](https://travis-ci.org/react-tracing/react-tracing.svg?branch=master)](https://travis-ci.org/react-tracing/react-tracing) [![Coverage Status](https://coveralls.io/repos/github/react-tracing/react-tracing/badge.svg?branch=master)](https://coveralls.io/github/react-tracing/react-tracing?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/react-tracing/react-tracing.svg)](https://greenkeeper.io/)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 ## Goal
 
@@ -161,3 +162,14 @@ This stack is stored in the global scope (it's a bit ugly, do you have a better 
 ### Working with multiple systems
 
 Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars2.githubusercontent.com/u/1337046?v=4" width="100px;"/><br /><sub>Daniel Schmidt</sub>](http://danielmschmidt.de/)<br />[💻](https://github.com/react-tracing/react-tracing/commits?author=DanielMSchmidt "Code") [📖](https://github.com/react-tracing/react-tracing/commits?author=DanielMSchmidt "Documentation") [🤔](#ideas-DanielMSchmidt "Ideas, Planning, & Feedback") [⚠️](https://github.com/react-tracing/react-tracing/commits?author=DanielMSchmidt "Tests") [🔧](#tool-DanielMSchmidt "Tools") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
