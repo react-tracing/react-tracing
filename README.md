@@ -88,8 +88,8 @@ function myVeryLongFunction() {
 
 #### Defining your own stack of spans
 
-Normally we manage the stack of spans for you and this works great because currently Javascript is single-threaded.
-However there might be occasions where you want to manage this on your own, so we give you the option to use your Stack implementation instead of ours and manage that thing on your own.
+Normally `react-tracing` manages the stack of spans for you and this works great because currently Javascript is single-threaded.
+However there might be occasions where you want to manage this on your own, so `react-tracing` gives you the option to use your Stack implementation instead of ours and manage that thing on your own.
 
 ```javascript
 class MyLittleStack {
@@ -133,10 +133,10 @@ child span | like functions calls are nested, spans can be, too
 
 ### How we manage your spans
 
-In other tracing solutions you have to define which span is the child of which, but we handle this for you.
-Therefore we use a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
+In other tracing solutions you have to define which span is the child of which, but `react-tracing` handles this for you.
+Therefore `react-tracing` uses a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
 This stack is stored in the global scope (it's a bit ugly, do you have a better idea?) under `window.reactTracing.stack` or `global.reactTracing.stack`.
 
 ### Working with multiple systems
 
-Every time you send a fetch or xhr request we set the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context.
+Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
