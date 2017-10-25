@@ -1,6 +1,15 @@
 # 📈 React Tracing [![Build Status](https://travis-ci.org/react-tracing/react-tracing.svg?branch=master)](https://travis-ci.org/react-tracing/react-tracing) [![Coverage Status](https://coveralls.io/repos/github/react-tracing/react-tracing/badge.svg?branch=master)](https://coveralls.io/github/react-tracing/react-tracing?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/react-tracing/react-tracing.svg)](https://greenkeeper.io/)
 
-A set of tools to add performance tracing to your React or React Native application.
+## Goal
+
+The goal of `react-tracing` is to enable React and React Native developers to build faster products by making the real-world performance visible. Although it is optimized for React and React Native we also support pure JS.
+<details>
+For this we want to use well-known tooling from the backend world and bring it to the frontend, so that engineering teams might gain a better understanding where a loading time improvement might help the most.<br><br>
+
+Imagine having graphs like this showing real users using your (web-)app when you want to decide which performance issue to tackle next:
+    <img src="http://zipkin.io/public/img/web-screenshot.png" />
+</details>
+
 
 ## Usage
 
