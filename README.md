@@ -11,6 +11,11 @@ Imagine having graphs like this showing real users using your (web-)app when you
 </details>
 
 
+## Environment Setup
+
+You need a Zipkin instance running on an accessible server. 
+For development puropses you can start one with docker: `docker run -d -p 9411:9411 openzipkin/zipkin`
+
 ## Usage
 
 
