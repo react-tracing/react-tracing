@@ -40,6 +40,6 @@
     "opentracing": "^0.14.1",
     "zipkin": "^0.10.0",
     "zipkin-javascript-opentracing": "^1.1.0",
-    "zipkin-transport-http": "^0.9.0"
+    "zipkin-transport-http": "^0.10.0"
   }
 }
