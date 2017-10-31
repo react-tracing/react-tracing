@@ -11,6 +11,25 @@ Imagine having graphs like this showing real users using your (web-)app when you
     <img src="http://zipkin.io/public/img/web-screenshot.png" />
 </details>
 
+## Introduction
+This section aims to give you a small overview into the language used in [opentracing](http://opentracing.io/documentation/pages/spec)
+
+### Terminology
+
+Term | Description
+------------ | -------------
+span | a single operation that is traced
+child span | like functions calls are nested, spans can be, too
+
+### How we manage your spans
+
+In other tracing solutions you have to define which span is the child of which, but `react-tracing` handles this for you.
+Therefore `react-tracing` uses a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
+This stack is stored in the global scope (it's a bit ugly, do you have a better idea?) under `window.reactTracing.stack` or `global.reactTracing.stack`.
+
+### Working with multiple systems
+
+Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
 
 ## Environment Setup
 
@@ -142,26 +161,6 @@ const tracer = new Tracing({
     stack: customStack,
 });
 ```
-
-
-## Further Reading
-
-### Terminology
-
-Term | Description
------------- | -------------
-span | a single operation that is traced
-child span | like functions calls are nested, spans can be, too
-
-### How we manage your spans
-
-In other tracing solutions you have to define which span is the child of which, but `react-tracing` handles this for you.
-Therefore `react-tracing` uses a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
-This stack is stored in the global scope (it's a bit ugly, do you have a better idea?) under `window.reactTracing.stack` or `global.reactTracing.stack`.
-
-### Working with multiple systems
-
-Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
 
 ## Contributors
 
