@@ -6,9 +6,9 @@
     "opentracing": "^0.14.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14",
+    "react-scripts": "^1.0.16",
     "zipkin": "^0.10.1",
-    "zipkin-javascript-opentracing": "^1.1.0",
+    "zipkin-javascript-opentracing": "^1.2.0",
     "zipkin-transport-http": "^0.10.1"
   },
   "scripts": {
@@ -20,8 +20,8 @@
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
-    "cypress": "^1.0.2",
+    "cypress": "^1.0.3",
     "node-fetch": "^1.7.3",
-    "serve": "^6.3.1"
+    "serve": "^6.4.0"
   }
 }
