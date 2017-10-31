@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "opentracing": "^0.14.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14"
+    "react-scripts": "1.0.14",
+    "zipkin": "^0.10.1",
+    "zipkin-javascript-opentracing": "^1.1.0",
+    "zipkin-transport-http": "^0.10.1"
   },
   "scripts": {
     "start": "react-scripts start",
