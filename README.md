@@ -53,7 +53,7 @@ const tracer = new Tracing({
 // You have two options here depending on your style of usage
 // a) You can either use it locally, enabling you to set a different service name per fetch 
 const defaultFetch = tracer.fetch();
-const tracingXhr = tracer.xhr(XMLHttpRequest); // last param optional, otherwise a global is taken
+const tracingXhr = tracer.xhr(XMLHttpRequest); // last param optional, otherwise a global is used
 
 // b) You can choose to let us handle everything for you
 // This mutates the global fetch and XHR request
@@ -62,7 +62,7 @@ tracer.initGlobalNetworkTracer();
 // You can define a span that generates you the span names, this is the default one.
 // If you want to use the default and a third param pass anything that is not a function as the second parameter.
 const getSpanName = ({ url, method, data }) => `client send ${method} to ${url} with data ${JSON.stringify(data)}`;
-const tracedFetch = tracer.fetch(getSpanName, fetch); // last param optional, otherwise a global is taken
+const tracedFetch = tracer.fetch(getSpanName, fetch); // last param optional, otherwise a global is used
 
 
 
@@ -77,7 +77,7 @@ const Touchable = tracer.component(TouchableHighlight);
 
 // Every onPress / onClick / onLongPress is wrapped with a function like this
 // The first argument is added as a callback to indicate when the interaction is done
-const clickHanlder = function(done) {
+const clickHandler = function(done) {
     fetch("http://foo.de").then(...).finally(done);
 };
 const tracedClickHandler = tracer.wrap(clickHandler);
