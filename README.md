@@ -12,9 +12,10 @@ Imagine having graphs like this showing real users using your (web-)app when you
 
 
 ## Introduction
-This section aims to give you a small overview into the language used in [opentracing](http://opentracing.io/documentation/pages/spec)
 
 ### Terminology
+
+This section aims to give you a small overview into the language used in [opentracing](http://opentracing.io/documentation/pages/spec)
 
 Term | Description
 ------------ | -------------
@@ -26,6 +27,7 @@ child span | like functions calls are nested, spans can be, too
 In other tracing solutions you have to define which span is the child of which, but `react-tracing` handles this for you.
 Therefore `react-tracing` uses a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
 This stack is stored in the global scope (it's a bit ugly, do you have a better idea?) under `window.reactTracing.stack` or `global.reactTracing.stack`.
+
 
 
 ### Supported Tracing Implementations
