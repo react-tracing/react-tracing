@@ -27,6 +27,14 @@ In other tracing solutions you have to define which span is the child of which, 
 Therefore `react-tracing` uses a stack, making use of Javascripts Single-Threadedness, to determine which spans should rely on each other.
 This stack is stored in the global scope (it's a bit ugly, do you have a better idea?) under `window.reactTracing.stack` or `global.reactTracing.stack`.
 
+
+### Supported Tracing Implementations
+
+We can use every [opentracing](http://opentracing.io/) solution in general, but currently there is only one, therefore it is not configurable yet.
+As soon as there are other solutions we will add them here.
+
+- [zipkin-javascript-opentracing](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
+
 ### Working with multiple systems
 
 Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
