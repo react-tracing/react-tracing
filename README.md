@@ -37,7 +37,7 @@ As soon as there are other solutions we will add them here.
 
 ### Working with multiple systems
 
-Every time you send a fetch or xhr request `react-tracing` sets the `X-B3-TraceId`, `X-B3-SpanId` and so on tokens, so that your server can pick it up and extend the tracing context. As long as you use the instrumented fetch / XHR versions.
+Every time you send a fetch or xhr request with `react-tracing`'s instrumented versions of them the `X-B3-TraceId`, `X-B3-SpanId` HTTP headers are set, so that your server can pick the span up and extend the tracing context.
 
 ## Environment Setup
 
