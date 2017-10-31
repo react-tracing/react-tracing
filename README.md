@@ -3,13 +3,13 @@
 
 ## Goal
 
-The goal of `react-tracing` is to enable React and React Native developers to build faster products by making the real-world performance visible. Although it is optimized for React and React Native we also support pure JS.
-<details>
+The goal of `react-tracing` is to enable React and React Native developers to build faster products by making the real-world performance visible. Although it is optimized for React and React Native we also support pure JS.<br>
+
 For this we want to use well-known tooling from the backend world and bring it to the frontend, so that engineering teams might gain a better understanding where a loading time improvement might help the most.<br><br>
 
 Imagine having graphs like this showing real users using your (web-)app when you want to decide which performance issue to tackle next:
     <img src="http://zipkin.io/public/img/web-screenshot.png" />
-</details>
+
 
 ## Introduction
 This section aims to give you a small overview into the language used in [opentracing](http://opentracing.io/documentation/pages/spec)
