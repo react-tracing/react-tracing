@@ -133,43 +133,6 @@ function myVeryLongFunction() {
 }
 ```
 
-### Advanced usage
-
-#### Defining your own stack of spans
-
-Normally `react-tracing` manages the stack of spans for you and this works great because currently Javascript is single-threaded.
-However there might be occasions where you want to manage this on your own, so `react-tracing` gives you the option to use your Stack implementation instead of ours and manage that thing on your own.
-
-```javascript
-class MyLittleStack {
-  constructor() {
-    this.list = [];
-  }
-  
-  push(item) {
-    this.list.push(item);
-  }
-  
-  pop() {
-    return this.list.pop();
-  }
-  
-  peek() {
-    if (!this.list.length) {
-      throw new Error("No items in stack");
-    }
-    
-    return this.list[this.list.length - 1];
-  }
-}
-import Tracing from "react-tracing";
-const customStack = new MyLittleStack();
-const tracer = new Tracing({
-    ...allUsualOptions,
-    stack: customStack,
-});
-```
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
