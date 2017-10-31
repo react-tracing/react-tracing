@@ -86,9 +86,9 @@ const Link = tracer.component("a")
 const Touchable = tracer.component(TouchableHighlight);
 
 // Every onPress / onClick / onLongPress is wrapped with a function like this
-// The first argument is added as a callback to indicate when the interaction is done
-const clickHandler = function(done) {
-    fetch("http://foo.de").then(...).finally(done);
+// If a promise is returned, the span will end once it resolves or rejects
+const clickHandler = function() {
+    return fetch("http://foo.de").then(...);
 };
 const tracedClickHandler = tracer.wrap(clickHandler);
 
