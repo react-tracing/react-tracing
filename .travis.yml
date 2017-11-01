@@ -23,7 +23,7 @@ matrix:
       before_script:
       - yarn run build
       - docker run -d -p 9411:9411 openzipkin/zipkin
-      - ./node_modules/.bin/serve -s build & SERVER_PID=$!
+      - ./node_modules/.bin/serve -p 3000 -s build & SERVER_PID=$!
       script:
       - yarn test
       after_script:
