@@ -15,7 +15,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test:build": "serve -s build",
+    "test:build": "serve -p 3000 -s build",
     "test": "cypress run --record --key $CYPRESS_KEY"
   },
   "devDependencies": {
