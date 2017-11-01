@@ -2983,9 +2983,9 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-zipkin-javascript-opentracing@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/zipkin-javascript-opentracing/-/zipkin-javascript-opentracing-1.3.1.tgz#62197a8ae7882c38180e298d734162743cc43f19"
+zipkin-javascript-opentracing@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/zipkin-javascript-opentracing/-/zipkin-javascript-opentracing-1.3.3.tgz#649620f48c4bffb41a1306bf9e0e057fcc60e8e1"
 
 zipkin-transport-http@^0.10.0:
   version "0.10.1"
