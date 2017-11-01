@@ -1,7 +1,7 @@
 language: node_js
 node_js: 8
 env: 
-  - $NODE_VERSION="8.7"
+  - NODE_VERSION="8.7"
 matrix:
   include:
     # Unit Tests
@@ -15,6 +15,8 @@ matrix:
     # E2E Web
     - services:
       - docker
+      env:
+        - CI=false
       install:
       - cd example/react-example
       - yarn install
