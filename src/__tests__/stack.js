@@ -1,3 +1,4 @@
+// @flow
 const Stack = require("../stack");
 
 describe("stack", () => {

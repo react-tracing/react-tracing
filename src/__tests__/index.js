@@ -1,6 +1,9 @@
+// @flow
+declare var fail: Function;
 const Tracing = require("../");
 
 class MockTracer {
+  finish: () => void;
   constructor({ finish }) {
     this.finish = finish;
   }
@@ -27,9 +30,9 @@ describe("react-tracing", () => {
 
     it("should be able to log a span", () => {
       tracer.startSpan("bar");
-      tracer.log({ foo: 3 });
+      tracer.log({ foo: "3" });
 
-      expect(tracer.stack.peek().log).toHaveBeenCalledWith({ foo: 3 });
+      expect(tracer.stack.peek().log).toHaveBeenCalledWith({ foo: "3" });
     });
 
     it("should be able to finish", () => {

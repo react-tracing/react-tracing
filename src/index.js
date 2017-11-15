@@ -7,6 +7,7 @@ import Stack from "./stack";
 const defaultGetSpanName = ({ url, method, body }) => `${url}-${method}`;
 
 interface Span {
+  name?: string;
   log({ [string]: string }): void;
   finish(): void;
 }
@@ -17,8 +18,8 @@ interface TracerType {
 
 type FetchImplementationType = (
   endpoint: string,
-  args: Object
-) => Promise<Object>;
+  args?: Object
+) => Promise<any>;
 type ExplicitTracerDeclaration = {
   tracer: TracerType
 };
