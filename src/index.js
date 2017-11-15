@@ -14,6 +14,7 @@ interface Span {
 
 interface TracerType {
   startSpan(spanName: string): Span;
+  inject(span: Span, format: string, headers: Object): void;
 }
 
 type FetchImplementationType = (
@@ -75,13 +76,14 @@ class Tracing {
     }
 
     const getName = getSpanName || defaultGetSpanName;
-    const reactTracingFetch = (...args) => {
-      const [url, options = {}] = args;
+    const reactTracingFetch = (url, options = {}) => {
       const { method = "GET", body = "" } = options;
       const spanName = getName({ url, method, body });
 
-      this.startSpan(spanName);
-      return fetchImplementation(...args).then(
+      const span = this.startSpan(spanName);
+      const headers = options.headers || {};
+      this.tracer.inject(span, OpentracingZipkin.FORMAT_HTTP_HEADERS, headers);
+      return fetchImplementation(url, { ...options, headers }).then(
         result => {
           this.finishSpan();
           return result;
@@ -96,9 +98,10 @@ class Tracing {
     return reactTracingFetch;
   }
 
-  startSpan(name: string): void {
+  startSpan(name: string): Span {
     const span = this.tracer.startSpan(name);
     this.stack.push(span);
+    return span;
   }
 
   log(options: { [string]: string }): void {

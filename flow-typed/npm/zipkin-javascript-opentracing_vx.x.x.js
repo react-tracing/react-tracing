@@ -20,6 +20,7 @@ interface Span {
 
 interface TracerType {
   startSpan(spanName: string): Span;
+  inject(span: Span, format: string, headers: Object): void;
 }
 
 declare module "zipkin-javascript-opentracing" {

@@ -1,17 +1,8 @@
 // @flow
+import MockTracer from "../testUtils/mockTracer";
+
 declare var fail: Function;
 const Tracing = require("../");
-
-class MockTracer {
-  finish: () => void;
-  constructor({ finish }) {
-    this.finish = finish;
-  }
-
-  startSpan(spanName) {
-    return { name: spanName, finish: this.finish, log: jest.fn() };
-  }
-}
 
 describe("react-tracing", () => {
   describe("opentracing forwarding", () => {

@@ -1,17 +1,10 @@
 // @flow
+import MockTracer from "../testUtils/mockTracer";
+
+import express from "express";
+import nodeFetch from "node-fetch";
 declare var fail: Function;
 const Tracing = require("../");
-
-class MockTracer {
-  finish: () => void;
-  constructor({ finish }) {
-    this.finish = finish;
-  }
-
-  startSpan(spanName) {
-    return { name: spanName, finish: this.finish, log: jest.fn() };
-  }
-}
 
 describe("requests - fetch", () => {
   let tracer, fetchMock, finishMock, succeedRequest, failRequest;
@@ -98,5 +91,48 @@ describe("requests - fetch", () => {
 
     expect(finishMock).toHaveBeenCalled();
     expect(tracer.stack.list.length).toBe(0);
+  });
+
+  describe("Forwarding headers", () => {
+    let server, path;
+    beforeEach(() => {
+      const app = express();
+      app.get(
+        "/user",
+        (req: $Subtype<express$Request>, res: express$Response) =>
+          res.status(202).json({
+            traceId: req.header("X-B3-TraceId") || "?",
+            spanId: req.header("X-B3-SpanId") || "?"
+          })
+      );
+
+      return new Promise(resolve => {
+        server = app.listen(0, () => {
+          const port = server.address().port;
+          path = `http://127.0.0.1:${port}/user`;
+          resolve();
+        });
+      });
+    });
+
+    it("should have a path set", () => {
+      expect(path).toBeTruthy();
+    });
+
+    it("should set the spanId and traceId for requests to external systems", async () => {
+      const instrumentedFetch = tracer.fetch({
+        fetch: nodeFetch
+      });
+      const result = await instrumentedFetch(path).then(res => res.json());
+      expect(result.traceId).toBeDefined();
+      expect(result.traceId).not.toBe("?");
+
+      expect(result.spanId).toBeDefined();
+      expect(result.spanId).not.toBe("?");
+    });
+
+    afterEach(() => {
+      server.close();
+    });
   });
 });
