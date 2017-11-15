@@ -8,6 +8,7 @@
     "flow"
   ],
   "plugins": [
+    "transform-flow-comments",
     [
       "transform-object-rest-spread",
       {
