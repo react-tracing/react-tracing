@@ -61,6 +61,29 @@ describe("react-tracing", () => {
         expect(tracer.fetch).toBeInstanceOf(Function);
       });
 
+      it("should throw if there is no fetch to be found", () => {
+        expect(() => {
+          tracer.fetch();
+        }).toThrowError();
+        expect(() => {
+          tracer.fetch({});
+        }).toThrowError();
+
+        expect(() => {
+          tracer.fetch({ fetch: fetchMock });
+        }).not.toThrowError();
+
+        const oldGlobal = global;
+        global.fetch = fetchMock;
+        expect(() => {
+          tracer.fetch();
+          tracer.fetch({});
+        }).not.toThrowError();
+        expect(() => {
+          tracer.fetch({ fetch: fetchMock });
+        }).not.toThrowError();
+      });
+
       it("tracer should start and finish a span", async () => {
         const instrumentedFetch = tracer.fetch({ fetch: fetchMock });
         const promise = instrumentedFetch("http://google.de");

@@ -37,7 +37,7 @@ type spanNameArguments = {
 
 type TracerOptions = ExplicitTracerDeclaration | ImplicitTracerDeclaration;
 type FetchOptions = {
-  fetch: FetchImplementationType,
+  fetch?: FetchImplementationType,
   getSpanName?: spanNameArguments => string
 };
 
@@ -62,10 +62,17 @@ class Tracing {
   }
 
   // TODO: default to global one
-  fetch({
-    fetch: fetchImplementation,
-    getSpanName
-  }: FetchOptions): FetchImplementationType {
+  fetch(
+    { fetch: externalFetchImplementation, getSpanName }: FetchOptions = {}
+  ): FetchImplementationType {
+    const fetchImplementation =
+      externalFetchImplementation || (window || global || self).fetch;
+    if (typeof fetchImplementation !== "function") {
+      throw new Error(
+        "fetch implementation is neither supplied nor could it be guessed from window, global or self"
+      );
+    }
+
     const getName = getSpanName || defaultGetSpanName;
     const reactTracingFetch = (...args) => {
       const [url, options = {}] = args;
