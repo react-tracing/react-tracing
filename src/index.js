@@ -43,6 +43,10 @@ type FetchOptions = {
   getSpanName?: spanNameArguments => string
 };
 
+type InitGlobalNetworkTracerOptions = {
+  getSpanName?: spanNameArguments => string
+};
+
 class Tracing {
   stack: Stack<Span>;
   tracer: TracerType;
@@ -63,7 +67,6 @@ class Tracing {
     this.stack = new Stack();
   }
 
-  // TODO: default to global one
   fetch(
     { fetch: externalFetchImplementation, getSpanName }: FetchOptions = {}
   ): FetchImplementationType {
@@ -96,6 +99,17 @@ class Tracing {
     };
 
     return reactTracingFetch;
+  }
+
+  initGlobalNetworkTracer(
+    { getSpanName }: InitGlobalNetworkTracerOptions = {}
+  ) {
+    const getName = getSpanName || defaultGetSpanName;
+    const globalScope = window || global || self;
+    if (typeof globalScope.fetch === "function") {
+      const originalFetch = globalScope.fetch;
+      globalScope.fetch = this.fetch({ fetch: originalFetch });
+    }
   }
 
   startSpan(name: string): Span {
