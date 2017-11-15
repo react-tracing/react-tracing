@@ -1,17 +1,21 @@
-class Stack {
+//@flow
+
+class Stack<T> {
+  list: Array<T>;
+
   constructor() {
     this.list = [];
   }
 
-  push(item) {
+  push(item: T) {
     this.list.push(item);
   }
 
-  pop() {
+  pop(): T {
     return this.list.pop();
   }
 
-  peek() {
+  peek(): T {
     if (!this.list.length) {
       throw new Error("No items in stack");
     }

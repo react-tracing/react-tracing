@@ -1,12 +1,51 @@
-const OpentracingZipkin = require("zipkin-javascript-opentracing");
-const zipkin = require("zipkin");
-const { HttpLogger } = require("zipkin-transport-http");
+// @flow
+import OpentracingZipkin from "zipkin-javascript-opentracing";
+import zipkin from "zipkin";
+import { HttpLogger } from "zipkin-transport-http";
+import Stack from "./stack";
 
-const Stack = require("./stack");
 const defaultGetSpanName = ({ url, method, body }) => `${url}-${method}`;
 
+interface Span {
+  log({ [string]: string }): void;
+  finish(): void;
+}
+
+interface TracerType {
+  startSpan(spanName: string): Span;
+}
+
+type FetchImplementationType = (
+  endpoint: string,
+  args: Object
+) => Promise<Object>;
+type ExplicitTracerDeclaration = {
+  tracer: TracerType
+};
+
+type ImplicitTracerDeclaration = {
+  tracer: null,
+  serviceName: string,
+  endpoint: string
+};
+
+type spanNameArguments = {
+  url: string,
+  method: string,
+  body: string
+};
+
+type TracerOptions = ExplicitTracerDeclaration | ImplicitTracerDeclaration;
+type FetchOptions = {
+  fetch: FetchImplementationType,
+  getSpanName?: spanNameArguments => string
+};
+
 class Tracing {
-  constructor(options) {
+  stack: Stack<Span>;
+  tracer: TracerType;
+
+  constructor(options: TracerOptions) {
     this.tracer =
       options.tracer ||
       OpentracingZipkin({
@@ -23,7 +62,10 @@ class Tracing {
   }
 
   // TODO: default to global one
-  fetch({ fetch: fetchImplementation, getSpanName }) {
+  fetch({
+    fetch: fetchImplementation,
+    getSpanName
+  }: FetchOptions): FetchImplementationType {
     const getName = getSpanName || defaultGetSpanName;
     const reactTracingFetch = (...args) => {
       const [url, options = {}] = args;
@@ -46,18 +88,18 @@ class Tracing {
     return reactTracingFetch;
   }
 
-  startSpan(name) {
+  startSpan(name: string): void {
     const span = this.tracer.startSpan(name);
     this.stack.push(span);
   }
 
-  log(options) {
+  log(options: { [string]: string }): void {
     const span = this.stack.peek();
     span.log(options);
   }
 
-  finishSpan() {
-    const span = this.stack.pop();
+  finishSpan(): void {
+    const span: Span = this.stack.pop();
     span.finish();
   }
 }
