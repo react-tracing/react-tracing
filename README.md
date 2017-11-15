@@ -71,7 +71,7 @@ const tracer = new Tracing({
 // You have two options here depending on your style of usage
 // a) You can either use it locally, enabling you to set a different service name per fetch
 const defaultFetch = tracer.fetch();
-const tracingXhr = tracer.xhr(XMLHttpRequest); // last param optional, otherwise a global is used
+const tracingXhr = tracer.xhr({ XMLHttpRequest }); // last param optional, otherwise a global is used
 
 // b) You can choose to let us handle everything for you
 // This mutates the global fetch and XHR request
@@ -79,8 +79,8 @@ tracer.initGlobalNetworkTracer();
 
 // You can define a span that generates you the span names, this is the default one.
 // If you want to use the default and a third param pass anything that is not a function as the second parameter.
-const getSpanName = ({ url, method, data }) => `client send ${method} to ${url} with data ${JSON.stringify(data)}`;
-const tracedFetch = tracer.fetch(getSpanName, fetch); // last param optional, otherwise a global is used
+const getSpanName = ({ url, method, body }) => `${url}-${method}`;
+const tracedFetch = tracer.fetch({ getSpanName, fetch});
 
 
 
@@ -145,8 +145,8 @@ function myVeryLongFunction() {
 
 ## Contributors
 
-Thanks goes to these wonderful people
-([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+Thanks goes to these wonderful people ([emoji
+key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 
