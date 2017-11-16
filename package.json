@@ -1,6 +1,6 @@
 {
   "name": "react-tracing",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description":
     "A set of tools to add performance tracing to your React or React Native application",
   "main": "lib/index.js",
