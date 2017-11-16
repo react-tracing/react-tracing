@@ -4,8 +4,8 @@ export default class MockTracer {
     this.finish = finish;
   }
 
-  startSpan(spanName) {
-    return { name: spanName, finish: this.finish, log: jest.fn() };
+  startSpan(spanName, { childOf } = {}) {
+    return { name: spanName, finish: this.finish, log: jest.fn(), childOf };
   }
   inject(span, _, headers) {
     headers["X-B3-TraceId"] = "traceId";

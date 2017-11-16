@@ -19,6 +19,17 @@ describe("react-tracing", () => {
       expect(tracer.stack.peek().name).toBe("foo");
     });
 
+    it("should extend the last span given", () => {
+      tracer.startSpan("foo");
+      expect(tracer.stack.peek().name).toBe("foo");
+
+      tracer.startSpan("bar");
+      expect(tracer.stack.peek().name).toBe("bar");
+
+      // $FlowFixMe
+      expect(tracer.stack.peek().childOf.name).toBe("foo");
+    });
+
     it("should be able to log a span", () => {
       tracer.startSpan("bar");
       tracer.log({ foo: "3" });

@@ -12,8 +12,12 @@ interface Span {
   finish(): void;
 }
 
+type startSpanOptions = {
+  childOf?: ?Span
+};
+
 interface TracerType {
-  startSpan(spanName: string): Span;
+  startSpan(spanName: string, options?: ?startSpanOptions): Span;
   inject(span: Span, format: string, headers: Object): void;
 }
 
@@ -113,7 +117,14 @@ class Tracing {
   }
 
   startSpan(name: string): Span {
-    const span = this.tracer.startSpan(name);
+    let parentSpan;
+    try {
+      parentSpan = this.stack.peek();
+    } catch (e) {
+      // Don't use a parent span, be a root span
+    }
+
+    const span = this.tracer.startSpan(name, { childOf: parentSpan });
     this.stack.push(span);
     return span;
   }

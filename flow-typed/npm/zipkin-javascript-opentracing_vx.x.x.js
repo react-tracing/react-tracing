@@ -18,8 +18,12 @@ interface Span {
   finish(): void;
 }
 
+type startSpanOptions = {
+  childOf?: ?Object
+};
+
 interface TracerType {
-  startSpan(spanName: string): Span;
+  startSpan(spanName: string, options?: ?startSpanOptions): Span;
   inject(span: Span, format: string, headers: Object): void;
 }
 
