@@ -13,7 +13,8 @@
     "lint": "./node_modules/.bin/flow",
     "test:unit": "jest",
     "test": "npm run lint && npm run test:unit",
-    "fmt": "./node_modules/.bin/prettier --write **/*.{js,json,css,md}"
+    "fmt":
+      "./node_modules/.bin/prettier --write **/*.{js,json,css,md} && ./node_modules/.bin/prettier --write src/{__tests__,__mocks__,testUtils}/**/*.{js,json,css,md}"
   },
   "files": ["README.md", "lib/"],
   "jest": {
