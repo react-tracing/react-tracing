@@ -140,4 +140,53 @@ describe("async stacks", () => {
     expect(tracer.stack.list.length).toBe(0);
     expect(finishMock).toHaveBeenCalledTimes(2);
   });
+
+  /* ┌─┴────┐
+   * │Fetch1│────────┐
+   * └─┬────┘        ▼
+   *   │             Λ
+   * ┌─┴───────┐    ╱ ╲
+   * │Response1│◀──▕ 1 ▏
+   * └─┬───────┘    ╲ ╱
+   *   │             V
+   * ┌─┴────┐
+   * │Fetch2│─────────┐
+   * └─┬────┘         ▼
+   *   │              Λ
+   * ┌─┴───────┐     ╱ ╲
+   * │Response2│◀───▕ 2 ▏
+   * └─┬───────┘     ╲ ╱
+   *   │              V
+   *   │
+   *   ▼
+  */
+  it("should trace correcly with two requests after each other", async () => {
+    let spanId = 0;
+    const getSpanName = () => {
+      spanId += 1;
+      return `span-${spanId}`;
+    };
+
+    const instrumentedFetch = tracer.fetch({ fetch: nodeFetch, getSpanName });
+    const server = await generateServer(25);
+    expect(tracer.stack.list.length).toBe(0);
+
+    // Fetch1
+    const fetch1 = instrumentedFetch(
+      `http://127.0.0.1:${server.address().port}`
+    );
+    expect(tracer.stack.list.length).toBe(1);
+    expect(tracer.stack.peek().name).toBe("span-1");
+    await fetch1;
+    expect(tracer.stack.list.length).toBe(0);
+
+    // Fetch2
+    const fetch2 = instrumentedFetch(
+      `http://127.0.0.1:${server.address().port}`
+    );
+    expect(tracer.stack.list.length).toBe(1);
+    expect(tracer.stack.peek().name).toBe("span-2");
+    await fetch2;
+    expect(tracer.stack.list.length).toBe(0);
+  });
 });
