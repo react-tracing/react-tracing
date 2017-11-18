@@ -46,6 +46,7 @@ describe("requests - fetch", () => {
     expect(() => {
       tracer.fetch({ fetch: fetchMock });
     }).not.toThrowError();
+    global = oldGlobal;
   });
 
   it("tracer should start and finish a span", async () => {
