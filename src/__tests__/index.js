@@ -16,25 +16,35 @@ describe("react-tracing", () => {
     it("should be able to start a span", () => {
       tracer.startSpan("foo");
 
-      expect(tracer.stack.peek().name).toBe("foo");
+      expect(tracer.openSpans.map(span => span.name)).toEqual(
+        expect.arrayContaining(["foo"])
+      );
     });
 
     it("should extend the last span given", () => {
       tracer.startSpan("foo");
-      expect(tracer.stack.peek().name).toBe("foo");
+      expect(tracer.openSpans.map(span => span.name)).toEqual(
+        expect.arrayContaining(["foo"])
+      );
 
       tracer.startSpan("bar");
-      expect(tracer.stack.peek().name).toBe("bar");
+      expect(tracer.openSpans.map(span => span.name)).toEqual(
+        expect.arrayContaining(["foo", "bar"])
+      );
 
       // $FlowFixMe
-      expect(tracer.stack.peek().childOf.name).toBe("foo");
+      const barSpan = tracer.openSpans.find(span => span.name === "bar");
+      // $FlowFixMe
+      expect(barSpan.childOf.name).toBe("foo");
     });
 
     it("should be able to log a span", () => {
       tracer.startSpan("bar");
       tracer.log({ foo: "3" });
 
-      expect(tracer.stack.peek().log).toHaveBeenCalledWith({ foo: "3" });
+      const barSpan = tracer.openSpans.find(span => span.name === "bar");
+      // $FlowFixMe
+      expect(barSpan.log).toHaveBeenCalledWith({ foo: "3" });
     });
 
     it("should be able to finish", () => {
@@ -42,7 +52,7 @@ describe("react-tracing", () => {
       tracer.finishSpan();
 
       expect(finishMock).toHaveBeenCalled();
-      expect(tracer.stack.list.length).toBe(0);
+      expect(tracer.openSpans.length).toBe(0);
     });
   });
 });

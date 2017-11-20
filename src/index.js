@@ -138,6 +138,11 @@ class Tracing {
     const span: Span = this.stack.pop();
     span.finish();
   }
+
+  // Private API
+  get openSpans(): Array<Span> {
+    return this.stack.list;
+  }
 }
 
 module.exports = Tracing;
