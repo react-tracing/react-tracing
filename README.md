@@ -159,3 +159,7 @@ Thanks goes to these wonderful people
 This project follows the
 [all-contributors](https://github.com/kentcdodds/all-contributors)
 specification. Contributions of any kind welcome!
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing?ref=badge_large)
