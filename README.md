@@ -2,24 +2,26 @@
 
 ## Goal
 
-`react-tracing` enables React and React Native developers to build faster
-products by making the real-world performance visible. Although it is optimized
-for React and React Native we also support pure JS.<br>
+`react-tracing` enables React and React Native developers to build
+faster products by making the real-world performance visible. Although
+it is optimized for React and React Native we also support pure
+JS.<br>
 
-For this we want to use well-known tooling from the backend world and bring it
-to the frontend, so that engineering teams might gain a better understanding
-where a loading time improvement might help the most.<br><br>
+For this we want to use well-known tooling from the backend world and
+bring it to the frontend, so that engineering teams might gain a
+better understanding where a loading time improvement might help the
+most.<br><br>
 
-Imagine having graphs like this showing real users using your (web-)app when you
-want to decide which performance issue to tackle next:
-<img src="http://zipkin.io/public/img/web-screenshot.png" />
+Imagine having graphs like this showing real users using your
+(web-)app when you want to decide which performance issue to tackle
+next: <img src="http://zipkin.io/public/img/web-screenshot.png" />
 
 ## Introduction
 
 ### Terminology
 
-This section aims to give you a small overview into the language used in
-[opentracing](http://opentracing.io/documentation/pages/spec)
+This section aims to give you a small overview into the language used
+in [opentracing](http://opentracing.io/documentation/pages/spec)
 
 | Term       | Description                                        |
 | ---------- | -------------------------------------------------- |
@@ -28,32 +30,35 @@ This section aims to give you a small overview into the language used in
 
 ### How we manage your spans
 
-In other tracing solutions you have to define which span is the child of which,
-but `react-tracing` handles this for you. Therefore `react-tracing` uses a
-stack, making use of Javascripts Single-Threadedness, to determine which spans
-should rely on each other. This stack is stored in the global scope (it's a bit
-ugly, do you have a better idea?) under `window.reactTracing.stack` or
+In other tracing solutions you have to define which span is the child
+of which, but `react-tracing` handles this for you. Therefore
+`react-tracing` uses a stack, making use of Javascripts
+Single-Threadedness, to determine which spans should rely on each
+other. This stack is stored in the global scope (it's a bit ugly, do
+you have a better idea?) under `window.reactTracing.stack` or
 `global.reactTracing.stack`.
 
 ### Supported Tracing Implementations
 
-We can use every [opentracing](http://opentracing.io/) solution in general, but
-currently there is only one, therefore it is not configurable yet. As soon as
-there are other solutions we will add them here.
+We can use every [opentracing](http://opentracing.io/) solution in
+general, but currently there is only one, therefore it is not
+configurable yet. As soon as there are other solutions we will add
+them here.
 
 * [zipkin-javascript-opentracing](https://github.com/DanielMSchmidt/zipkin-javascript-opentracing)
 
 ### Working with multiple systems
 
-Every time you send a fetch or xhr request with `react-tracing`'s instrumented
-versions of them the `X-B3-TraceId`, `X-B3-SpanId` HTTP headers are set, so that
-your server can pick the span up and extend the tracing context.
+Every time you send a fetch or xhr request with `react-tracing`'s
+instrumented versions of them the `X-B3-TraceId`, `X-B3-SpanId` HTTP
+headers are set, so that your server can pick the span up and extend
+the tracing context.
 
 ## Environment Setup
 
-You need a Zipkin instance running on an accessible server. For development
-puropses you can start one with docker: `docker run -d -p 9411:9411
-openzipkin/zipkin`
+You need a Zipkin instance running on an accessible server. For
+development puropses you can start one with docker: `docker run -d -p
+9411:9411 openzipkin/zipkin`
 
 ## Usage
 
@@ -160,6 +165,6 @@ This project follows the
 [all-contributors](https://github.com/kentcdodds/all-contributors)
 specification. Contributions of any kind welcome!
 
-
 ## License
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing?ref=badge_large)

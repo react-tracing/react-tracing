@@ -6,36 +6,38 @@ const Tracing = require("../");
 
 // TODO: move into testUtils
 function generateServer(timeout) {
-  return new Promise(resolve => {
-    const app = express();
-    app.all("/", (req, res) => {
-      setTimeout(
-        () =>
-          res.status(202).json({
-            done: true
-          }),
-        timeout
-      );
-    });
+	return new Promise(resolve => {
+		const app = express();
+		app.all("/", (req, res) => {
+			setTimeout(
+				() =>
+					res.status(202).json({
+						done: true
+					}),
+				timeout
+			);
+		});
 
-    const server = app.listen(0);
-    resolve(server);
-  });
+		const server = app.listen(0);
+		resolve(server);
+	});
 }
 
 function wait(timeout) {
-  new Promise(resolve => setTimeout(() => resolve(), timeout));
+	new Promise(resolve => setTimeout(() => resolve(), timeout));
 }
 
 describe("async stacks", () => {
-  let tracer, finishMock;
+	let tracer, finishMock;
 
-  beforeEach(() => {
-    finishMock = jest.fn();
-    tracer = new Tracing({ tracer: new MockTracer({ finish: finishMock }) });
-  });
+	beforeEach(() => {
+		finishMock = jest.fn();
+		tracer = new Tracing({
+			tracer: new MockTracer({ finish: finishMock })
+		});
+	});
 
-  /* ┌──┴───┐
+	/* ┌──┴───┐
   *  │Fetch1│───────────────┐
   *  └──┬───┘               ▼
   *  ┌──┴───┐               Λ
@@ -49,53 +51,56 @@ describe("async stacks", () => {
   *  └──┬──────┘      ╲ ╱
   *     ▼              V
   */
-  it("should trace correcly with spans that return while others are still in progress", async () => {
-    let spanId = 0;
-    const getSpanName = () => {
-      spanId += 1;
-      return `span-${spanId}`;
-    };
+	it("should trace correcly with spans that return while others are still in progress", async () => {
+		let spanId = 0;
+		const getSpanName = () => {
+			spanId += 1;
+			return `span-${spanId}`;
+		};
 
-    const instrumentedFetch = tracer.fetch({ fetch: nodeFetch, getSpanName });
-    const server = await generateServer(100);
-    const { port } = server.address();
-    const url = `http://127.0.0.1:${port}`;
-    expect(tracer.openSpans.length).toBe(0);
+		const instrumentedFetch = tracer.fetch({
+			fetch: nodeFetch,
+			getSpanName
+		});
+		const server = await generateServer(100);
+		const { port } = server.address();
+		const url = `http://127.0.0.1:${port}`;
+		expect(tracer.openSpans.length).toBe(0);
 
-    // Fetch1
-    const fetch1 = instrumentedFetch(url);
-    expect(tracer.openSpans.length).toBe(1);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1"])
-    );
-    await wait(10);
+		// Fetch1
+		const fetch1 = instrumentedFetch(url);
+		expect(tracer.openSpans.length).toBe(1);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1"])
+		);
+		await wait(10);
 
-    // Fetch2
-    const fetch2 = instrumentedFetch(url);
-    expect(tracer.openSpans.length).toBe(2);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1", "span-2"])
-    );
+		// Fetch2
+		const fetch2 = instrumentedFetch(url);
+		expect(tracer.openSpans.length).toBe(2);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1", "span-2"])
+		);
 
-    // Response1
-    await fetch1;
-    expect(tracer.openSpans.length).toBe(1);
-    // vvv Wrong Assertion: current behavoiur vvv
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1"])
-    );
+		// Response1
+		await fetch1;
+		expect(tracer.openSpans.length).toBe(1);
+		// vvv Wrong Assertion: current behavoiur vvv
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1"])
+		);
 
-    // vvv Right Assertion: expected behavoiur vvv
-    // expect(tracer.openSpans.map(span => span.name)).toEqual(expect.arrayContaining(['span-2']))
+		// vvv Right Assertion: expected behavoiur vvv
+		// expect(tracer.openSpans.map(span => span.name)).toEqual(expect.arrayContaining(['span-2']))
 
-    // Response2
-    await fetch2;
-    expect(tracer.openSpans.length).toBe(0);
+		// Response2
+		await fetch2;
+		expect(tracer.openSpans.length).toBe(0);
 
-    expect(finishMock).toHaveBeenCalledTimes(2);
-  });
+		expect(finishMock).toHaveBeenCalledTimes(2);
+	});
 
-  /* ┌──┴───┐
+	/* ┌──┴───┐
   *  │Fetch1│──────────────────┐
   *  └──┬───┘     ┌─────▶      ▼
   *  ┌──┴───┐     │      Λ     Λ
@@ -109,51 +114,54 @@ describe("async stacks", () => {
   *  └──┬──────┘
   *    ▼
   */
-  it("should trace correcly with nested spans", async () => {
-    let spanId = 0;
-    const getSpanName = () => {
-      spanId += 1;
-      return `span-${spanId}`;
-    };
+	it("should trace correcly with nested spans", async () => {
+		let spanId = 0;
+		const getSpanName = () => {
+			spanId += 1;
+			return `span-${spanId}`;
+		};
 
-    const instrumentedFetch = tracer.fetch({ fetch: nodeFetch, getSpanName });
-    const server1 = await generateServer(100);
-    const server2 = await generateServer(25);
-    expect(tracer.openSpans.length).toBe(0);
+		const instrumentedFetch = tracer.fetch({
+			fetch: nodeFetch,
+			getSpanName
+		});
+		const server1 = await generateServer(100);
+		const server2 = await generateServer(25);
+		expect(tracer.openSpans.length).toBe(0);
 
-    // Fetch1
-    const fetch1 = instrumentedFetch(
-      `http://127.0.0.1:${server1.address().port}`
-    );
-    expect(tracer.openSpans.length).toBe(1);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1"])
-    );
-    await wait(10);
+		// Fetch1
+		const fetch1 = instrumentedFetch(
+			`http://127.0.0.1:${server1.address().port}`
+		);
+		expect(tracer.openSpans.length).toBe(1);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1"])
+		);
+		await wait(10);
 
-    // Fetch2
-    const fetch2 = instrumentedFetch(
-      `http://127.0.0.1:${server2.address().port}`
-    );
-    expect(tracer.openSpans.length).toBe(2);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1", "span-2"])
-    );
+		// Fetch2
+		const fetch2 = instrumentedFetch(
+			`http://127.0.0.1:${server2.address().port}`
+		);
+		expect(tracer.openSpans.length).toBe(2);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1", "span-2"])
+		);
 
-    // Response2
-    await fetch2;
-    expect(tracer.openSpans.length).toBe(1);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1"])
-    );
+		// Response2
+		await fetch2;
+		expect(tracer.openSpans.length).toBe(1);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1"])
+		);
 
-    // Response1
-    await fetch1;
-    expect(tracer.openSpans.length).toBe(0);
-    expect(finishMock).toHaveBeenCalledTimes(2);
-  });
+		// Response1
+		await fetch1;
+		expect(tracer.openSpans.length).toBe(0);
+		expect(finishMock).toHaveBeenCalledTimes(2);
+	});
 
-  /* ┌─┴────┐
+	/* ┌─┴────┐
    * │Fetch1│────────┐
    * └─┬────┘        ▼
    *   │             Λ
@@ -172,41 +180,44 @@ describe("async stacks", () => {
    *   │
    *   ▼
   */
-  it("should trace correcly with two requests after each other", async () => {
-    let spanId = 0;
-    const getSpanName = () => {
-      spanId += 1;
-      return `span-${spanId}`;
-    };
+	it("should trace correcly with two requests after each other", async () => {
+		let spanId = 0;
+		const getSpanName = () => {
+			spanId += 1;
+			return `span-${spanId}`;
+		};
 
-    const instrumentedFetch = tracer.fetch({ fetch: nodeFetch, getSpanName });
-    const server = await generateServer(25);
-    expect(tracer.openSpans.length).toBe(0);
+		const instrumentedFetch = tracer.fetch({
+			fetch: nodeFetch,
+			getSpanName
+		});
+		const server = await generateServer(25);
+		expect(tracer.openSpans.length).toBe(0);
 
-    // Fetch1
-    const fetch1 = instrumentedFetch(
-      `http://127.0.0.1:${server.address().port}`
-    );
-    expect(tracer.openSpans.length).toBe(1);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-1"])
-    );
-    await fetch1;
-    expect(tracer.openSpans.length).toBe(0);
+		// Fetch1
+		const fetch1 = instrumentedFetch(
+			`http://127.0.0.1:${server.address().port}`
+		);
+		expect(tracer.openSpans.length).toBe(1);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-1"])
+		);
+		await fetch1;
+		expect(tracer.openSpans.length).toBe(0);
 
-    // Fetch2
-    const fetch2 = instrumentedFetch(
-      `http://127.0.0.1:${server.address().port}`
-    );
-    expect(tracer.openSpans.length).toBe(1);
-    expect(tracer.openSpans.map(span => span.name)).toEqual(
-      expect.arrayContaining(["span-2"])
-    );
-    await fetch2;
-    expect(tracer.openSpans.length).toBe(0);
-  });
+		// Fetch2
+		const fetch2 = instrumentedFetch(
+			`http://127.0.0.1:${server.address().port}`
+		);
+		expect(tracer.openSpans.length).toBe(1);
+		expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect.arrayContaining(["span-2"])
+		);
+		await fetch2;
+		expect(tracer.openSpans.length).toBe(0);
+	});
 
-  /*      │
+	/*      │
   *  ┌────┴──────┐
   *  │fetch1     │──────────────────────┐
   *  └────┬──────┘                      │
@@ -238,5 +249,5 @@ describe("async stacks", () => {
   *   │response1.1│◀────────────────────┘
   *   └───────────┘
   */
-  it("should set the parents according to the call chain");
+	it("should set the parents according to the call chain");
 });
