@@ -33,7 +33,9 @@ describe("async stacks", () => {
 	beforeEach(() => {
 		finishMock = jest.fn();
 		tracer = new Tracing({
-			tracer: new MockTracer({ finish: finishMock })
+			tracer: new MockTracer({
+				finish: finishMock
+			})
 		});
 	});
 
@@ -249,7 +251,7 @@ describe("async stacks", () => {
   *   │response1.1│◀────────────────────┘
   *   └───────────┘
   */
-	it("should set the parents according to the call chain", async () => {
+	it("should set the parents according to the call chain with one callback", async () => {
 		let spanId = 0;
 		const getSpanName = () => {
 			spanId += 1;
@@ -322,4 +324,59 @@ describe("async stacks", () => {
 
 		expect(finishMock).toHaveBeenCalledTimes(3);
 	});
+
+	/*      │
+	** ┌────┴──────┐
+	** │fetch1     │──────────────────────┐
+	** └────┬──────┘                      │
+	**      │                             │
+	** ┌────┴──────┐                      │
+	** │fetch2     │─────┐                │
+	** └────┬──────┘     ▼                ▼
+	**      │       .─────────.      .─────────.
+	**      │      ╱           ╲    ╱           ╲
+	**      │     (   Server    )  (   Server    )
+	**      │      `.         ,'    `.         ,'
+	**      │        `───────'        `───────'
+	**  ┌───┴───────┐    │                │
+	**  │response1  │◀───┼────────────────┘
+	**  └───┬─────┬─┘    │
+	**      │     ├────┐ │
+	**      │     │ CB │ │
+	**      │     ├────┘ │
+	**      │     ▼      │           .─────────.
+	**  ┌───┴───────┐    │          ╱           ╲
+	**  │fetch1.1   │────┼────────▶(   Server    )
+	**  └───┬───────┘    │          `.         ,'
+	**      │            │            `───────'
+	**  ┌───┴───────┐    │                │
+	**  │response2  │◀───┘                │
+	**  └───┬────┬──┘                     │
+	**      │    ├────┐                   │
+	**      │    │ CB │                   │
+	**      │    ├────┘                   │
+	**      │    ▼                        │
+	** ┌────┴──────┐                      │
+	** │fetch2.1   │──────────┐           │
+	** └────┬──────┘          ▼           │
+	**      │            .─────────.      │
+	**      │           ╱           ╲     │
+	**      │          (   Server    )    │
+	**      │           `.         ,'     │
+	**      │             `───────'       │
+	** ┌────┴──────┐          │           │
+	** │response1.1│◀─────────┼───────────┘
+	** └────┬──────┘          │
+	**      │                 │
+	** ┌────┴──────┐          │
+	** │response2.1│◀─────────┘
+	** └────┬──────┘
+	**      │
+	**      │
+	**      │
+	**      ▼
+	*/
+	it(
+		"should set the parents according to the call chain with two callbacks"
+	);
 });
