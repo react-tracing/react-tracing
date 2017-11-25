@@ -93,9 +93,9 @@ class Tracing {
 			const { method = "GET", body = "" } = options;
 			const spanName = getName({ url, method, body });
 
-			// $FlowFixMe
 			const span = this.startSpan(
 				spanName,
+				// $FlowFixMe
 				this._tracing_current_span
 			);
 			const headers = options.headers || {};
