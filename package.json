@@ -1,63 +1,63 @@
 {
-  "name": "react-tracing",
-  "version": "0.1.4",
-  "description":
-    "A set of tools to add performance tracing to your React or React Native application",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "babel src/ -d lib/ && rm -rf lib/__tests__",
-    "contributor:add": "all-contributors add",
-    "contributor:generate": "all-contributors generate",
-    "precommit": "lint-staged",
-    "prepublish": "npm run build",
-    "lint": "./node_modules/.bin/flow",
-    "test:unit": "jest",
-    "test": "npm run lint && npm run test:unit",
-    "fmt":
-      "./node_modules/.bin/prettier --write **/*.{js,json,css,md} && ./node_modules/.bin/prettier --write src/{__tests__,__mocks__,testUtils}/**/*.{js,json,css,md}"
-  },
-  "files": ["README.md", "lib/"],
-  "jest": {
-    "collectCoverage": true,
-    "transform": {
-      ".js": "babel-jest"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/react-tracing/react-tracing.git"
-  },
-  "keywords": ["react", "tracing", "zipkin", "performance"],
-  "author": "DanielMSchmidt <danielmschmidt92@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/react-tracing/react-tracing/issues"
-  },
-  "homepage": "https://github.com/react-tracing/react-tracing#readme",
-  "devDependencies": {
-    "all-contributors-cli": "^4.9.1",
-    "babel-cli": "^6.26.0",
-    "babel-jest": "^21.2.0",
-    "babel-plugin-transform-flow-comments": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "coveralls": "^3.0.0",
-    "express": "^4.16.2",
-    "flow-bin": "^0.59.0",
-    "husky": "^0.14.3",
-    "jest": "^21.2.1",
-    "lint-staged": "^5.0.0",
-    "node-fetch": "^1.7.3",
-    "prettier": "^1.8.2"
-  },
-  "dependencies": {
-    "opentracing": "^0.14.1",
-    "zipkin": "^0.11.1",
-    "zipkin-javascript-opentracing": "^1.4.0",
-    "zipkin-transport-http": "^0.11.1"
-  }
+	"name": "react-tracing",
+	"version": "0.1.4",
+	"description":
+		"A set of tools to add performance tracing to your React or React Native application",
+	"main": "lib/index.js",
+	"scripts": {
+		"build": "babel src/ -d lib/ && rm -rf lib/__tests__",
+		"contributor:add": "all-contributors add",
+		"contributor:generate": "all-contributors generate",
+		"precommit": "lint-staged",
+		"prepublish": "npm run build",
+		"lint": "./node_modules/.bin/flow",
+		"test:unit": "jest --no-coverage",
+		"test": "npm run lint && npm run test:unit",
+		"fmt":
+			"./node_modules/.bin/prettier --write **/*.{js,json,css,md} && ./node_modules/.bin/prettier --write src/{__tests__,__mocks__,testUtils}/**/*.{js,json,css,md}"
+	},
+	"files": ["README.md", "lib/"],
+	"jest": {
+		"collectCoverage": true,
+		"transform": {
+			".js": "babel-jest"
+		}
+	},
+	"lint-staged": {
+		"*.{js,json,css,md}": ["prettier --write", "git add"]
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/react-tracing/react-tracing.git"
+	},
+	"keywords": ["react", "tracing", "zipkin", "performance"],
+	"author": "DanielMSchmidt <danielmschmidt92@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/react-tracing/react-tracing/issues"
+	},
+	"homepage": "https://github.com/react-tracing/react-tracing#readme",
+	"devDependencies": {
+		"all-contributors-cli": "^4.9.1",
+		"babel-cli": "^6.26.0",
+		"babel-jest": "^21.2.0",
+		"babel-plugin-transform-flow-comments": "^6.22.0",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"babel-preset-flow": "^6.23.0",
+		"coveralls": "^3.0.0",
+		"express": "^4.16.2",
+		"flow-bin": "^0.59.0",
+		"husky": "^0.14.3",
+		"jest": "^21.2.1",
+		"lint-staged": "^5.0.0",
+		"node-fetch": "^1.7.3",
+		"prettier": "^1.8.2"
+	},
+	"dependencies": {
+		"opentracing": "^0.14.1",
+		"zipkin": "^0.11.1",
+		"zipkin-javascript-opentracing": "^1.4.0",
+		"zipkin-transport-http": "^0.11.1"
+	}
 }
