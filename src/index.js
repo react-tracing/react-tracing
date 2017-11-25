@@ -100,15 +100,20 @@ class Tracing {
 				OpentracingZipkin.FORMAT_HTTP_HEADERS,
 				headers
 			);
+
+			function success(span, result) {
+				this.finishSpan(span);
+				return result;
+			}
+
+			function failure(span, err) {
+				this.finishSpan(span);
+				throw err;
+			}
+
 			return fetchImplementation(url, { ...options, headers }).then(
-				result => {
-					this.finishSpan();
-					return result;
-				},
-				err => {
-					this.finishSpan();
-					throw err;
-				}
+				success.bind(this, span),
+				failure.bind(this, span)
 			);
 		};
 
@@ -144,9 +149,16 @@ class Tracing {
 		span.log(options);
 	}
 
-	finishSpan(): void {
-		const span: Span = this.stack.pop();
-		span.finish();
+	finishSpan(span: ?Span): void {
+		let s;
+		if (span) {
+			s = span;
+			this.stack.remove(span);
+		} else {
+			s = this.stack.pop();
+		}
+
+		s.finish();
 	}
 
 	// Private API

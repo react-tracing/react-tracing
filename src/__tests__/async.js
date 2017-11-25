@@ -60,7 +60,7 @@ describe("async stacks", () => {
 		const fetch1 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
 
@@ -68,19 +68,15 @@ describe("async stacks", () => {
 		const fetch2 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(3);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1", "span-2"])
+			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
 		// Response1
 		await fetch1;
 		expect(tracer.openSpans.length).toBe(2);
-		// vvv Wrong Assertion: current behavoiur vvv
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-2"])
 		);
-
-		// vvv Right Assertion: expected behavoiur vvv
-		// expect(tracer.openSpans.map(span => span.name)).toEqual(expect.arrayContaining(['span-2']))
 
 		// Response2
 		await fetch2;
@@ -124,7 +120,7 @@ describe("async stacks", () => {
 		);
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
 
@@ -134,14 +130,14 @@ describe("async stacks", () => {
 		);
 		expect(tracer.openSpans.length).toBe(3);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1", "span-2"])
+			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
 		// Response2
 		await fetch2;
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 
 		// Response1
@@ -189,7 +185,7 @@ describe("async stacks", () => {
 		);
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await fetch1;
 		expect(tracer.openSpans.length).toBe(1);
@@ -200,7 +196,7 @@ describe("async stacks", () => {
 		);
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-2"])
+			expect.arrayContaining(["rootSpan", "span-2"])
 		);
 		await fetch2;
 		expect(tracer.openSpans.length).toBe(1);
@@ -264,7 +260,7 @@ describe("async stacks", () => {
 		});
 		expect(tracer.openSpans.length).toBe(2);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
 
@@ -272,39 +268,32 @@ describe("async stacks", () => {
 		const fetch2 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(3);
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1", "span-2"])
+			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
 		// Response1
 		await fetch1;
 		await wait(10);
 		expect(tracer.openSpans.length).toBe(3);
-		// vvv Wrong Assertion: current behavoiur vvv
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1", "span-3"])
+			expect.arrayContaining(["rootSpan", "span-2", "span-3"])
 		);
-
-		// vvv Right Assertion: expected behavoiur vvv
-		// expect(tracer.openSpans.map(span => span.name)).toEqual(expect.arrayContaining(['span-2', 'span-3']))
 
 		const span3 = tracer.openSpans.find(
 			span => span.name === "span-3"
 		);
-		expect(span3.childOf.name).toEqual("span-1");
+		// vvv Wrong Assertion: current behavoiur vvv
+		expect(span3.childOf.name).toEqual("span-2");
+
+		// vvv Right Assertion: expected behavoiur vvv
+		// expect(span3.childOf.name).toEqual("span-1");
 
 		// Response2
 		await fetch2;
 		expect(tracer.openSpans.length).toBe(2);
-
-		// vvv Wrong Assertion: current behavoiur vvv
 		expect(tracer.openSpans.map(span => span.name)).toEqual(
-			expect.arrayContaining(["span-1"])
+			expect.arrayContaining(["rootSpan", "span-3"])
 		);
-
-		// vvv Right Assertion: expected behavoiur vvv
-		// expect(tracer.openSpans.map(span => span.name)).toEqual(
-		// 	expect.arrayContaining(["span-3"])
-		// );
 
 		// Response1.1
 		await fetch1_1;

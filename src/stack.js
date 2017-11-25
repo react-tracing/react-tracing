@@ -22,6 +22,14 @@ class Stack<T> {
 
 		return this.list[this.list.length - 1];
 	}
+
+	remove(item: T): void {
+		this.list = this.list.filter(x => x !== item);
+	}
+
+	get length(): number {
+		return this.list.length;
+	}
 }
 
 module.exports = Stack;
