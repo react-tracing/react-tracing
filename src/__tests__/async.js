@@ -282,11 +282,7 @@ describe("async stacks", () => {
 		const span3 = tracer.openSpans.find(
 			span => span.name === "span-3"
 		);
-		// vvv Wrong Assertion: current behavoiur vvv
-		expect(span3.childOf.name).toEqual("span-2");
-
-		// vvv Right Assertion: expected behavoiur vvv
-		// expect(span3.childOf.name).toEqual("span-1");
+		expect(span3.childOf.name).toEqual("rootSpan");
 
 		// Response2
 		await fetch2;

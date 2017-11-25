@@ -93,7 +93,11 @@ class Tracing {
 			const { method = "GET", body = "" } = options;
 			const spanName = getName({ url, method, body });
 
-			const span = this.startSpan(spanName);
+			// $FlowFixMe
+			const span = this.startSpan(
+				spanName,
+				this._tracing_current_span
+			);
 			const headers = options.headers || {};
 			this.tracer.inject(
 				span,
@@ -103,11 +107,15 @@ class Tracing {
 
 			function success(span, result) {
 				this.finishSpan(span);
+				// $FlowFixMe
+				this._tracing_current_span = span.childOf;
 				return result;
 			}
 
 			function failure(span, err) {
 				this.finishSpan(span);
+				// $FlowFixMe
+				this._tracing_current_span = span.childOf;
 				throw err;
 			}
 
@@ -131,12 +139,14 @@ class Tracing {
 		}
 	}
 
-	startSpan(name: string): Span {
-		let parentSpan;
-		try {
-			parentSpan = this.stack.peek();
-		} catch (e) {
-			// Don't use a parent span, be a root span
+	startSpan(name: string, parent: ?Span): Span {
+		let parentSpan = parent;
+		if (!parentSpan) {
+			try {
+				parentSpan = this.stack.peek();
+			} catch (e) {
+				// Don't use a parent span, be a root span
+			}
 		}
 
 		const span = this.tracer.startSpan(name, { childOf: parentSpan });
