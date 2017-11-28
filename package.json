@@ -56,7 +56,8 @@
 		"jest": "^21.2.1",
 		"lint-staged": "^5.0.0",
 		"node-fetch": "^1.7.3",
-		"prettier": "^1.8.2"
+		"prettier": "^1.8.2",
+		"typescript": "^2.6.2"
 	},
 	"dependencies": {
 		"opentracing": "^0.14.1",
