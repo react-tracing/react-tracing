@@ -1,9 +1,9 @@
 // @flow
-const Stack = require("../stack");
+import Stack from "../stack"
 
 describe("stack", () => {
 	it("should throw an error if is no element to peek on", () => {
-		const s = new Stack();
+        const s = new Stack();
 		expect(() => {
 			s.peek();
 		}).toThrowErrorMatchingSnapshot();
