@@ -1,9 +1,9 @@
-import { Span } from '../index'
+import { Span } from "../index";
 
 export default class MockTracer {
-	finish: () => void
+	finish: () => void;
 	constructor({ finish }: { finish: () => void }) {
-		this.finish = finish
+		this.finish = finish;
 	}
 
 	startSpan(spanName: string, { childOf }: { childOf?: Span } = {}) {
@@ -11,11 +11,11 @@ export default class MockTracer {
 			name: spanName,
 			finish: this.finish,
 			log: jest.fn(),
-			childOf,
-		}
+			childOf
+		};
 	}
 	inject(span: Span, _: any, headers: { [key: string]: string }) {
-		headers['X-B3-TraceId'] = 'traceId'
-		headers['X-B3-SpanId'] = 'spanId'
+		headers["X-B3-TraceId"] = "traceId";
+		headers["X-B3-SpanId"] = "spanId";
 	}
 }

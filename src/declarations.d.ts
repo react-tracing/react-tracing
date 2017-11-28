@@ -1,10 +1,10 @@
-declare module 'zipkin-javascript-opentracing' {
-	const moduleContent: any
+declare module "zipkin-javascript-opentracing" {
+	const moduleContent: any;
 
-	export = moduleContent
+	export = moduleContent;
 }
 declare namespace NodeJS {
 	interface Global {
-		fetch: (...args: Array<any>) => Promise<Array<any>>
+		fetch: (...args: Array<any>) => Promise<Array<any>>;
 	}
 }

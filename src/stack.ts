@@ -4,7 +4,7 @@
  *  Class represeting a stack
  */
 class Stack<T> {
-	list: Array<T>
+	list: Array<T>;
 
 	/**
 	 * Create a stack
@@ -12,7 +12,7 @@ class Stack<T> {
 	 * @constructor
 	 */
 	constructor() {
-		this.list = []
+		this.list = [];
 	}
 
 	/**
@@ -23,7 +23,7 @@ class Stack<T> {
 	 * @param {T} item The item to add
 	 */
 	push(item: T) {
-		this.list.push(item)
+		this.list.push(item);
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Stack<T> {
 	 * @returns {T} The last added item
 	 */
 	pop(): T | undefined {
-		return this.list.pop()
+		return this.list.pop();
 	}
 
 	/**
@@ -46,10 +46,10 @@ class Stack<T> {
 	 */
 	peek(): T {
 		if (!this.list.length) {
-			throw new Error('No items in stack')
+			throw new Error("No items in stack");
 		}
 
-		return this.list[this.list.length - 1]
+		return this.list[this.list.length - 1];
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Stack<T> {
 	 * @param {T} item the item to remove
 	 */
 	remove(item: T): void {
-		this.list = this.list.filter(x => x !== item)
+		this.list = this.list.filter(x => x !== item);
 	}
 
 	/**
@@ -71,8 +71,8 @@ class Stack<T> {
 	 * @returns {Number} number of items in stack
 	 */
 	get length(): number {
-		return this.list.length
+		return this.list.length;
 	}
 }
 
-export default Stack
+export default Stack;
