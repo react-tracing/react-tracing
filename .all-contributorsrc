@@ -39,6 +39,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "kaoDev",
+      "name": "Kalle Ott",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3505939?v=4",
+      "profile": "http://www.cap3.de",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
