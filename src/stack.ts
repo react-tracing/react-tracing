@@ -33,7 +33,7 @@ class Stack<T> {
 	 * @function
 	 * @returns {T} The last added item
 	 */
-	pop(): T {
+	pop(): T | undefined {
 		return this.list.pop();
 	}
 
@@ -75,4 +75,4 @@ class Stack<T> {
 	}
 }
 
-module.exports = Stack;
+export default Stack;

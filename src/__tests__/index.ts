@@ -1,12 +1,13 @@
 // @flow
 import MockTracer from "../testUtils/mockTracer";
+import { Span } from "../index";
 
 declare var fail: Function;
 const Tracing = require("../");
 
 describe("react-tracing", () => {
 	describe("opentracing forwarding", () => {
-		let tracer, finishMock;
+		let tracer: any, finishMock: any;
 
 		beforeEach(() => {
 			finishMock = jest.fn();
@@ -18,25 +19,25 @@ describe("react-tracing", () => {
 		it("should be able to start a span", () => {
 			tracer.startSpan("foo");
 
-			expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 				expect.arrayContaining(["foo"])
 			);
 		});
 
 		it("should extend the last span given", () => {
 			tracer.startSpan("foo");
-			expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 				expect.arrayContaining(["foo"])
 			);
 
 			tracer.startSpan("bar");
-			expect(tracer.openSpans.map(span => span.name)).toEqual(
+			expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 				expect.arrayContaining(["foo", "bar"])
 			);
 
 			// $FlowFixMe
 			const barSpan = tracer.openSpans.find(
-				span => span.name === "bar"
+				(span: Span) => span.name === "bar"
 			);
 			// $FlowFixMe
 			expect(barSpan.childOf.name).toBe("foo");
@@ -47,7 +48,7 @@ describe("react-tracing", () => {
 			tracer.log({ foo: "3" });
 
 			const barSpan = tracer.openSpans.find(
-				span => span.name === "bar"
+				(span: Span) => span.name === "bar"
 			);
 			// $FlowFixMe
 			expect(barSpan.log).toHaveBeenCalledWith({ foo: "3" });

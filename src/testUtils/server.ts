@@ -1,7 +1,8 @@
-import express from "express";
+import * as express from "express";
+import { Server } from "http";
 
-export default function generateServer(timeout) {
-	return new Promise(resolve => {
+export default function generateServer(timeout: number) {
+	return new Promise<Server>(resolve => {
 		const app = express();
 		app.all("/", (req, res) => {
 			setTimeout(

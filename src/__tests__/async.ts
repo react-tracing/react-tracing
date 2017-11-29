@@ -2,14 +2,15 @@ import nodeFetch from "node-fetch";
 
 import MockTracer from "../testUtils/mockTracer";
 import generateServer from "../testUtils/server";
+import { Span } from "../index";
 const Tracing = require("../");
 
-function wait(timeout) {
+function wait(timeout: number) {
 	new Promise(resolve => setTimeout(() => resolve(), timeout));
 }
 
 describe("async stacks", () => {
-	let tracer, finishMock;
+	let tracer: any, finishMock: any;
 
 	beforeEach(() => {
 		finishMock = jest.fn();
@@ -59,7 +60,7 @@ describe("async stacks", () => {
 		// Fetch1
 		const fetch1 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
@@ -67,14 +68,14 @@ describe("async stacks", () => {
 		// Fetch2
 		const fetch2 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(3);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
 		// Response1
 		await fetch1;
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-2"])
 		);
 
@@ -119,7 +120,7 @@ describe("async stacks", () => {
 			`http://127.0.0.1:${server1.address().port}`
 		);
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
@@ -129,14 +130,14 @@ describe("async stacks", () => {
 			`http://127.0.0.1:${server2.address().port}`
 		);
 		expect(tracer.openSpans.length).toBe(3);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
 		// Response2
 		await fetch2;
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 
@@ -184,7 +185,7 @@ describe("async stacks", () => {
 			`http://127.0.0.1:${server.address().port}`
 		);
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await fetch1;
@@ -195,7 +196,7 @@ describe("async stacks", () => {
 			`http://127.0.0.1:${server.address().port}`
 		);
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-2"])
 		);
 		await fetch2;
@@ -259,7 +260,7 @@ describe("async stacks", () => {
 			return fetch1_1;
 		});
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1"])
 		);
 		await wait(10);
@@ -267,7 +268,7 @@ describe("async stacks", () => {
 		// Fetch2
 		const fetch2 = instrumentedFetch(url);
 		expect(tracer.openSpans.length).toBe(3);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-1", "span-2"])
 		);
 
@@ -275,19 +276,19 @@ describe("async stacks", () => {
 		await fetch1;
 		await wait(10);
 		expect(tracer.openSpans.length).toBe(3);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-2", "span-3"])
 		);
 
 		const span3 = tracer.openSpans.find(
-			span => span.name === "span-3"
+			(span: Span) => span.name === "span-3"
 		);
 		expect(span3.childOf.name).toEqual("rootSpan");
 
 		// Response2
 		await fetch2;
 		expect(tracer.openSpans.length).toBe(2);
-		expect(tracer.openSpans.map(span => span.name)).toEqual(
+		expect(tracer.openSpans.map((span: Span) => span.name)).toEqual(
 			expect.arrayContaining(["rootSpan", "span-3"])
 		);
 

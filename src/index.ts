@@ -1,71 +1,80 @@
 // @flow
-import OpentracingZipkin from "zipkin-javascript-opentracing";
-import zipkin from "zipkin";
+import * as Tracer from "zipkin-javascript-opentracing";
+import * as zipkin from "zipkin";
 import { HttpLogger } from "zipkin-transport-http";
 import Stack from "./stack";
+import { TraceId } from "zipkin";
 
-const defaultGetSpanName = ({ url, method, body }) =>
-	`${url}-${method}`;
+const defaultGetSpanName = ({
+	url,
+	method,
+	body
+}: {
+	url: string;
+	method: string;
+	body: string;
+}) => `${url}-${method}`;
 
-interface Span {
+export interface Span {
 	name?: string;
 	log({ [string]: string }): void;
 	finish(): void;
+	id: TraceId;
+
+	setTag(key: string, value: any): void;
 }
 
 type startSpanOptions = {
-	childOf?: ?Span
+	childOf?: Span;
 };
-
-interface TracerType {
-	startSpan(spanName: string, options?: ?startSpanOptions): Span;
-	inject(span: Span, format: string, headers: Object): void;
-}
 
 type FetchImplementationType = (
 	endpoint: string,
-	args?: Object
+	args?: object
 ) => Promise<any>;
 type ExplicitTracerDeclaration = {
-	tracer: TracerType
+	tracer: Tracer;
 };
 
 type ImplicitTracerDeclaration = {
-	tracer: null,
-	serviceName: string,
-	endpoint: string
+	tracer: null;
+	serviceName: string;
+	endpoint: string;
 };
 
 type spanNameArguments = {
-	url: string,
-	method: string,
-	body: string
+	url: string;
+	method: string;
+	body: string;
 };
 
 type TracerOptions =
 	| ExplicitTracerDeclaration
 	| ImplicitTracerDeclaration;
 type FetchOptions = {
-	fetch?: FetchImplementationType,
-	getSpanName?: spanNameArguments => string
+	fetch?: FetchImplementationType;
+	getSpanName?: (spanNameArguments: spanNameArguments) => string;
 };
 
 type InitGlobalNetworkTracerOptions = {
-	getSpanName?: spanNameArguments => string
+	getSpanName?: (spanNameArguments: spanNameArguments) => string;
 };
 
 class Tracing {
 	stack: Stack<Span>;
-	tracer: TracerType;
+	tracer: Tracer;
+
+	private _tracing_current_span?: Span;
 
 	constructor(options: TracerOptions) {
 		this.tracer =
 			options.tracer ||
-			OpentracingZipkin({
-				serviceName: options.serviceName,
+			new Tracer({
+				serviceName: (options as ImplicitTracerDeclaration)
+					.serviceName,
 				recorder: new zipkin.BatchRecorder({
 					logger: new HttpLogger({
-						endpoint: options.endpoint
+						endpoint: (options as ImplicitTracerDeclaration).endpoint
 					})
 				}),
 				kind: "client"
@@ -89,35 +98,40 @@ class Tracing {
 		}
 
 		const getName = getSpanName || defaultGetSpanName;
-		const reactTracingFetch = (url, options = {}) => {
+		const reactTracingFetch = (
+			url: string,
+			options: {
+				method?: string;
+				body?: string;
+				headers?: object;
+			} = {}
+		) => {
 			const { method = "GET", body = "" } = options;
 			const spanName = getName({ url, method, body });
 
 			const span = this.startSpan(
 				spanName,
-				// $FlowFixMe
 				this._tracing_current_span
 			);
 			const headers = options.headers || {};
-			this.tracer.inject(
-				span,
-				OpentracingZipkin.FORMAT_HTTP_HEADERS,
-				headers
-			);
+			this.tracer.inject(span, Tracer.FORMAT_HTTP_HEADERS, headers);
 
-			function success(span, result) {
+			const success = (
+				span: startSpanOptions & Span,
+				result: any
+			) => {
 				this.finishSpan(span);
 				// $FlowFixMe
 				this._tracing_current_span = span.childOf;
 				return result;
-			}
+			};
 
-			function failure(span, err) {
+			const failure = (span: startSpanOptions & Span, err: any) => {
 				this.finishSpan(span);
 				// $FlowFixMe
 				this._tracing_current_span = span.childOf;
 				throw err;
-			}
+			};
 
 			return fetchImplementation(url, { ...options, headers }).then(
 				success.bind(this, span),
@@ -139,7 +153,7 @@ class Tracing {
 		}
 	}
 
-	startSpan(name: string, parent: ?Span): Span {
+	startSpan(name: string, parent?: Span): Span {
 		let parentSpan = parent;
 		if (!parentSpan) {
 			try {
@@ -154,13 +168,13 @@ class Tracing {
 		return span;
 	}
 
-	log(options: { [string]: string }): void {
+	log(options: { [key: string]: string }): void {
 		const span = this.stack.peek();
 		span.log(options);
 	}
 
-	finishSpan(span: ?Span): void {
-		let s;
+	finishSpan(span: Span | undefined): void {
+		let s: Span | undefined;
 		if (span) {
 			s = span;
 			this.stack.remove(span);
@@ -168,7 +182,9 @@ class Tracing {
 			s = this.stack.pop();
 		}
 
-		s.finish();
+		if (s) {
+			s.finish();
+		}
 	}
 
 	// Private API

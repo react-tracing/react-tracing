@@ -1,13 +1,16 @@
 // @flow
 import MockTracer from "../testUtils/mockTracer";
 
-import express from "express";
+import * as express from "express";
 import nodeFetch from "node-fetch";
 declare var fail: Function;
 const Tracing = require("../");
 
 describe("requests - globalNetworkTracer", () => {
-	let tracer, fetchMock, finishMock, succeedRequest;
+	let tracer: any,
+		fetchMock: any,
+		finishMock: any,
+		succeedRequest: any;
 
 	beforeEach(() => {
 		finishMock = jest.fn();

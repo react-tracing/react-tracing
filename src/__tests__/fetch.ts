@@ -1,13 +1,19 @@
 // @flow
 import MockTracer from "../testUtils/mockTracer";
 
-import express from "express";
+import * as express from "express";
+import { Request, Response } from "express";
 import nodeFetch from "node-fetch";
+import { Server } from "http";
 declare var fail: Function;
 const Tracing = require("../");
 
 describe("requests - fetch", () => {
-	let tracer, fetchMock, finishMock, succeedRequest, failRequest;
+	let tracer: any,
+		fetchMock: any,
+		finishMock: any,
+		succeedRequest: any,
+		failRequest: any;
 
 	beforeEach(() => {
 		finishMock = jest.fn();
@@ -97,16 +103,14 @@ describe("requests - fetch", () => {
 	});
 
 	describe("Forwarding headers", () => {
-		let server, path;
+		let server: Server, path: string;
 		beforeEach(() => {
 			const app = express();
-			app.get(
-				"/user",
-				(req: $Subtype<express$Request>, res: express$Response) =>
-					res.status(202).json({
-						traceId: req.header("X-B3-TraceId") || "?",
-						spanId: req.header("X-B3-SpanId") || "?"
-					})
+			app.get("/user", (req: Request, res: Response) =>
+				res.status(202).json({
+					traceId: req.header("X-B3-TraceId") || "?",
+					spanId: req.header("X-B3-SpanId") || "?"
+				})
 			);
 
 			return new Promise(resolve => {
@@ -126,7 +130,7 @@ describe("requests - fetch", () => {
 			const instrumentedFetch = tracer.fetch({
 				fetch: nodeFetch
 			});
-			const result = await instrumentedFetch(path).then(res =>
+			const result = await instrumentedFetch(path).then((res: any) =>
 				res.json()
 			);
 			expect(result.traceId).toBeDefined();

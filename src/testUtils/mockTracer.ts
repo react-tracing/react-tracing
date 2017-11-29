@@ -1,10 +1,12 @@
+import { Span } from "../index";
+
 export default class MockTracer {
 	finish: () => void;
-	constructor({ finish }) {
+	constructor({ finish }: { finish: () => void }) {
 		this.finish = finish;
 	}
 
-	startSpan(spanName, { childOf } = {}) {
+	startSpan(spanName: string, { childOf }: { childOf?: Span } = {}) {
 		return {
 			name: spanName,
 			finish: this.finish,
@@ -12,7 +14,7 @@ export default class MockTracer {
 			childOf
 		};
 	}
-	inject(span, _, headers) {
+	inject(span: Span, _: any, headers: { [key: string]: string }) {
 		headers["X-B3-TraceId"] = "traceId";
 		headers["X-B3-SpanId"] = "spanId";
 	}
