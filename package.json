@@ -52,7 +52,7 @@
 		"coveralls": "^3.0.0",
 		"express": "^4.16.2",
 		"husky": "^0.14.3",
-		"jest": "^21.2.1",
+		"jest": "^22.0.3",
 		"lint-staged": "^5.0.0",
 		"node-fetch": "^1.7.3",
 		"prettier": "^1.8.2",
