@@ -1,5 +1,17 @@
 # 📈 React Tracing [![Build Status](https://travis-ci.org/react-tracing/react-tracing.svg?branch=master)](https://travis-ci.org/react-tracing/react-tracing) [![Coverage Status](https://coveralls.io/repos/github/react-tracing/react-tracing/badge.svg?branch=master)](https://coveralls.io/github/react-tracing/react-tracing?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/react-tracing/react-tracing.svg)](https://greenkeeper.io/) [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Freact-tracing%2Freact-tracing?ref=badge_shield)
 
+---
+
+⚠️⚠️ Please be aware that this library is heavily WIP and it's current
+state is more a proof of concept than a working implementation ⚠️⚠️
+
+If you are interested in seeing this moved forward, open an issue and
+tell me your use-case. I will do my best to provide a soltion to you
+that fit's your needs (hopefully). Also PRs are always welcome, I will
+do my best to guide you through this codebase.
+
+---
+
 ## Goal
 
 `react-tracing` enables React and React Native developers to build
