@@ -61,7 +61,7 @@
 	},
 	"dependencies": {
 		"opentracing": "^0.14.1",
-		"zipkin": "^0.11.1",
+		"zipkin": "^0.12.0",
 		"zipkin-javascript-opentracing": "^1.4.0",
 		"zipkin-transport-http": "^0.11.1"
 	}
