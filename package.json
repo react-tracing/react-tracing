@@ -44,7 +44,7 @@
 		"@types/jest": "^22.0.0",
 		"@types/node": "^10.0.3",
 		"@types/node-fetch": "^1.6.7",
-		"all-contributors-cli": "^4.9.1",
+		"all-contributors-cli": "^5.4.1",
 		"babel-cli": "^6.26.0",
 		"babel-jest": "^22.0.0",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
